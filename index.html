@@ -1,21 +1,194 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Mi aplicación</title>
+    <title>Clima Noetinger</title>
 
-    <!-- Referencia al manifest -->
+    <!-- Manifest -->
     <link rel="manifest" href="manifest.json">
 
     <!-- Icono -->
     <link rel="icon" href="icon-192.png">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f2f7f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            color: #555;
+            margin-top: 5px;
+        }
+
+        .clima {
+            background: white;
+            max-width: 400px;
+            margin: 30px auto;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        .dato {
+            font-size: 20px;
+            margin: 18px 0;
+        }
+
+        .valor {
+            font-weight: bold;
+        }
+
+        #estado {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>moa luca y rami</h1>
+    <h1>🌾 Aplicación agrícola</h1>
+
+    <h2>📍 Noetinger, Córdoba</h2>
+
+    <div class="clima">
+
+        <div id="estado">
+            🌤️ Cargando clima...
+        </div>
+
+        <div class="dato">
+            🌡️ Temperatura:
+            <span class="valor" id="temperatura">--</span>
+        </div>
+
+        <div class="dato">
+            💧 Humedad:
+            <span class="valor" id="humedad">--</span>
+        </div>
+
+        <div class="dato">
+            💨 Viento:
+            <span class="valor" id="viento">--</span>
+        </div>
+
+        <div class="dato">
+            🌧️ Precipitación:
+            <span class="valor" id="lluvia">--</span>
+        </div>
+
+    </div>
+
+    <script>
+
+        // Coordenadas de Noetinger, Córdoba
+        const latitud = -32.3667;
+        const longitud = -62.6333;
+
+        // API del clima
+        const url =
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitud}&longitude=${longitud}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m&temperature_unit=celsius&wind_speed_unit=kmh&timezone=America%2FArgentina%2FCordoba`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+
+                const clima = data.current;
+
+                // Temperatura
+                document.getElementById("temperatura").textContent =
+                    clima.temperature_2m + " °C";
+
+                // Humedad
+                document.getElementById("humedad").textContent =
+                    clima.relative_humidity_2m + " %";
+
+                // Viento
+                document.getElementById("viento").textContent =
+                    clima.wind_speed_10m + " km/h";
+
+                // Precipitación
+                document.getElementById("lluvia").textContent =
+                    clima.precipitation + " mm";
+
+                // Estado del tiempo
+                let estado = "";
+
+                switch (clima.weather_code) {
+
+                    case 0:
+                        estado = "☀️ Despejado";
+                        break;
+
+                    case 1:
+                    case 2:
+                    case 3:
+                        estado = "⛅ Parcialmente nublado";
+                        break;
+
+                    case 45:
+                    case 48:
+                        estado = "🌫️ Niebla";
+                        break;
+
+                    case 51:
+                    case 53:
+                    case 55:
+                        estado = "🌦️ Llovizna";
+                        break;
+
+                    case 61:
+                    case 63:
+                    case 65:
+                        estado = "🌧️ Lluvia";
+                        break;
+
+                    case 71:
+                    case 73:
+                    case 75:
+                        estado = "❄️ Nieve";
+                        break;
+
+                    case 80:
+                    case 81:
+                    case 82:
+                        estado = "🌧️ Chaparrones";
+                        break;
+
+                    case 95:
+                        estado = "⛈️ Tormenta";
+                        break;
+
+                    default:
+                        estado = "🌤️ Estado desconocido";
+                }
+
+                document.getElementById("estado").textContent = estado;
+
+            })
+            .catch(error => {
+
+                console.error("Error:", error);
+
+                document.getElementById("estado").textContent =
+                    "❌ No se pudo obtener el clima";
+
+            });
+
+    </script>
 
 </body>
 </html>
+```
