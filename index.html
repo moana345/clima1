@@ -1,9 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Clima Noetinger</title>
 
     <link rel="manifest" href="manifest.json">
@@ -18,13 +18,57 @@
             padding: 20px;
         }
 
+        .encabezado {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            max-width: 900px;
+            margin: 0 auto 25px;
+            padding: 15px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+        }
+
+        .logo-escuela {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
         h1 {
-            margin-bottom: 5px;
+            margin: 0 0 8px;
         }
 
         h2 {
             color: #555;
-            margin-top: 5px;
+            margin: 0;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .encabezado {
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .logo-escuela {
+                width: 70px;
+                height: 70px;
+            }
+
+            .encabezado h1 {
+                font-size: 19px;
+            }
+
+            .encabezado h2 {
+                font-size: 14px;
+            }
         }
 
         .contenedor {
@@ -87,70 +131,15 @@
             font-weight: bold;
             margin-bottom: 10px;
         }
-
-        /* ENCABEZADO CON EL LOGO DE LA ESCUELA */
-        .encabezado {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            max-width: 900px;
-            margin: 0 auto 25px;
-            padding: 15px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.10);
-            box-sizing: border-box;
-        }
-
-        .logo-escuela {
-            width: 95px;
-            height: 95px;
-            object-fit: contain;
-            flex-shrink: 0;
-        }
-
-        .encabezado h1 {
-            margin: 0 0 8px;
-            font-size: 25px;
-        }
-
-        .encabezado h2 {
-            margin: 0;
-            font-size: 17px;
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-
-            .encabezado {
-                gap: 10px;
-                padding: 10px;
-            }
-
-            .logo-escuela {
-                width: 75px;
-                height: 75px;
-            }
-
-            .encabezado h1 {
-                font-size: 19px;
-            }
-
-            .encabezado h2 {
-                font-size: 14px;
-            }
-        }
     </style>
 </head>
 
 <body>
 
+    <!-- ENCABEZADO CON LOGO DE LA ESCUELA -->
     <header class="encabezado">
         <img src="logo-escuela.png"
-             alt="Logo del I.P.E.T. 411 de Noetinger"
+             alt="Logo de la escuela I.P.E.T. 411"
              class="logo-escuela">
 
         <div>
@@ -214,31 +203,17 @@
 
     </div>
 
-
     <script>
-
-        // ==========================================
         // UBICACIÓN: NOETINGER, CÓRDOBA
-        // ==========================================
-
         const latitud = -32.3667;
         const longitud = -62.6333;
 
-
-        // ==========================================
         // API DEL CLIMA
-        // ==========================================
-
         const url =
             `https://api.open-meteo.com/v1/forecast?latitude=${latitud}&longitude=${longitud}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m&temperature_unit=celsius&wind_speed_unit=kmh&timezone=America%2FArgentina%2FCordoba`;
 
-
-        // ==========================================
         // FUNCIONES PARA CAMBIAR LOS RELOJES
-        // ==========================================
-
         function ponerEstado(idReloj, idEstado, estado) {
-
             const reloj = document.getElementById(idReloj);
             const texto = document.getElementById(idEstado);
 
@@ -260,24 +235,18 @@
             }
         }
 
-
-        // ==========================================
         // OBTENER CLIMA
-        // ==========================================
-
         fetch(url)
-
-            .then(response => response.json())
-
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("No se pudieron obtener los datos del clima");
+                }
+                return response.json();
+            })
             .then(data => {
-
                 const clima = data.current;
 
-
-                // ==========================================
                 // MOSTRAR DATOS
-                // ==========================================
-
                 document.getElementById("temperatura").textContent =
                     clima.temperature_2m + " °C";
 
@@ -290,11 +259,7 @@
                 document.getElementById("lluvia").textContent =
                     clima.precipitation + " mm";
 
-
-                // ==========================================
                 // TEMPERATURA
-                // ==========================================
-
                 let estadoTemperatura;
 
                 if (
@@ -302,26 +267,18 @@
                     clima.temperature_2m <= 30
                 ) {
                     estadoTemperatura = "verde";
-                }
-
-                else if (
+                } else if (
                     (clima.temperature_2m >= 10 &&
                     clima.temperature_2m < 15) ||
                     (clima.temperature_2m > 30 &&
                     clima.temperature_2m <= 35)
                 ) {
                     estadoTemperatura = "amarillo";
-                }
-
-                else {
+                } else {
                     estadoTemperatura = "rojo";
                 }
 
-
-                // ==========================================
                 // HUMEDAD
-                // ==========================================
-
                 let estadoHumedad;
 
                 if (
@@ -329,64 +286,40 @@
                     clima.relative_humidity_2m <= 70
                 ) {
                     estadoHumedad = "verde";
-                }
-
-                else if (
+                } else if (
                     (clima.relative_humidity_2m >= 30 &&
                     clima.relative_humidity_2m < 40) ||
                     (clima.relative_humidity_2m > 70 &&
                     clima.relative_humidity_2m <= 80)
                 ) {
                     estadoHumedad = "amarillo";
-                }
-
-                else {
+                } else {
                     estadoHumedad = "rojo";
                 }
 
-
-                // ==========================================
                 // VIENTO
-                // ==========================================
-
                 let estadoViento;
 
                 if (clima.wind_speed_10m <= 20) {
                     estadoViento = "verde";
-                }
-
-                else if (clima.wind_speed_10m <= 30) {
+                } else if (clima.wind_speed_10m <= 30) {
                     estadoViento = "amarillo";
-                }
-
-                else {
+                } else {
                     estadoViento = "rojo";
                 }
 
-
-                // ==========================================
                 // PRECIPITACIÓN
-                // ==========================================
-
                 let estadoLluvia;
 
                 if (clima.precipitation === 0) {
                     estadoLluvia = "verde";
-                }
-
-                else if (clima.precipitation <= 2) {
+                } else if (clima.precipitation <= 2) {
                     estadoLluvia = "amarillo";
-                }
-
-                else {
+                } else {
                     estadoLluvia = "rojo";
                 }
 
-
-                // ==========================================
                 // ACTUALIZAR RELOJES
-                // ==========================================
-
                 ponerEstado(
                     "relojTemperatura",
                     "estadoTemperatura",
@@ -411,15 +344,9 @@
                     estadoLluvia
                 );
 
-
-                // ==========================================
                 // CONDICIÓN GENERAL
-                // ==========================================
-
                 let estadoGeneral;
 
-
-                // Si alguno está rojo → ROJO
                 if (
                     estadoTemperatura === "rojo" ||
                     estadoHumedad === "rojo" ||
@@ -427,28 +354,18 @@
                     estadoLluvia === "rojo"
                 ) {
                     estadoGeneral = "rojo";
-                }
-
-                // Si no hay rojo pero alguno está amarillo → AMARILLO
-                else if (
+                } else if (
                     estadoTemperatura === "amarillo" ||
                     estadoHumedad === "amarillo" ||
                     estadoViento === "amarillo" ||
                     estadoLluvia === "amarillo"
                 ) {
                     estadoGeneral = "amarillo";
-                }
-
-                // Si todos están verdes → VERDE
-                else {
+                } else {
                     estadoGeneral = "verde";
                 }
 
-
-                // ==========================================
-                // MOSTRAR GENERAL
-                // ==========================================
-
+                // MOSTRAR CONDICIÓN GENERAL
                 const relojGeneral =
                     document.getElementById("relojGeneral");
 
@@ -458,62 +375,35 @@
                 const valorGeneral =
                     document.getElementById("valorGeneral");
 
-
                 relojGeneral.classList.remove(
                     "verde",
                     "amarillo",
                     "rojo"
                 );
 
-
                 if (estadoGeneral === "verde") {
-
                     relojGeneral.classList.add("verde");
-
                     valorGeneral.textContent = "🟢";
-
                     estadoGeneralTexto.textContent =
                         "APTO PARA COSECHAR";
-                }
-
-
-                else if (estadoGeneral === "amarillo") {
-
+                } else if (estadoGeneral === "amarillo") {
                     relojGeneral.classList.add("amarillo");
-
                     valorGeneral.textContent = "🟡";
-
                     estadoGeneralTexto.textContent =
                         "CONDICIONES INTERMEDIAS";
-                }
-
-
-                else {
-
+                } else {
                     relojGeneral.classList.add("rojo");
-
                     valorGeneral.textContent = "🔴";
-
                     estadoGeneralTexto.textContent =
                         "NO APTO PARA COSECHAR";
                 }
-
             })
-
-
-            // ==========================================
-            // ERROR
-            // ==========================================
-
             .catch(error => {
-
                 console.error("Error:", error);
 
                 document.getElementById("estadoGeneral").textContent =
                     "❌ Error al obtener el clima";
-
             });
-
     </script>
 
 </body>
