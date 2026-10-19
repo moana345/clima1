@@ -87,14 +87,77 @@
             font-weight: bold;
             margin-bottom: 10px;
         }
+
+        /* ENCABEZADO CON EL LOGO DE LA ESCUELA */
+        .encabezado {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto 25px;
+            padding: 15px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+            box-sizing: border-box;
+        }
+
+        .logo-escuela {
+            width: 95px;
+            height: 95px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .encabezado h1 {
+            margin: 0 0 8px;
+            font-size: 25px;
+        }
+
+        .encabezado h2 {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .encabezado {
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .logo-escuela {
+                width: 75px;
+                height: 75px;
+            }
+
+            .encabezado h1 {
+                font-size: 19px;
+            }
+
+            .encabezado h2 {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-    <h1>🌾 Aplicación agrícola</h1>
+    <header class="encabezado">
+        <img src="logo-escuela.png"
+             alt="Logo del I.P.E.T. 411 de Noetinger"
+             class="logo-escuela">
 
-    <h2>📍 Noetinger, Córdoba</h2>
+        <div>
+            <h1>🌾 Aplicación agrícola</h1>
+            <h2>📍 Noetinger, Córdoba</h2>
+        </div>
+    </header>
 
     <div class="contenedor">
 
