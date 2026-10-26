@@ -1,6 +1,6 @@
 {
-  "name": "Promo27",
-  "short_name": "clima para el campo",
+  "name": "Clima para cosechar",
+  "short_name": "Clima cosecha",
   "start_url": "/clima1/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -9,12 +9,14 @@
     {
       "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
